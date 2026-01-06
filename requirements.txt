@@ -1,0 +1,4 @@
+Flask
+WeasyPrint
+num2words
+gunicorn

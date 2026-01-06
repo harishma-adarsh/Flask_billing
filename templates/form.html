@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acadeno | Receipt Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --secondary: #7e22ce;
+            --accent: #f093fb;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-main: #2c3e50;
+            --text-muted: #5f6368;
+            --radius: 16px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-main);
+            padding: 40px 20px;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .logo-box {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 24px;
+        }
+
+        .header-title {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+            font-size: 32px;
+            margin: 0;
+        }
+
+        .header-subtitle {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .form-section-title {
+            font-weight: 700;
+            font-size: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 2px solid #eef0f2;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.1);
+        }
+
+        .input-group-text {
+            background: transparent;
+            border: 2px solid #eef0f2;
+            border-right: none;
+            border-radius: 12px 0 0 12px;
+            color: var(--text-muted);
+        }
+
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: #eef2f6;
+            margin: 40px 0;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 16px 32px;
+            font-weight: 700;
+            font-size: 18px;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(26, 115, 232, 0.3);
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(26, 115, 232, 0.4);
+            color: white;
+            filter: brightness(1.1);
+        }
+
+        .btn-generate:active {
+            transform: translateY(0);
+        }
+
+        .info-pill {
+            background: rgba(26, 115, 232, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            margin-top: 10px;
+        }
+
+        .readonly-input {
+            background: #f8fafc !important;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: not-allowed;
+        }
+
+        /* Responsive refinements */
+        @media (max-width: 768px) {
+            .glass-card {
+                padding: 25px;
+            }
+
+            .header-title {
+                font-size: 26px;
+            }
+        }
+    </style>
+
+    <script>
+        function calculateBalance() {
+            let fee = parseInt(document.getElementById("fee").value || 0);
+            let dis = parseInt(document.getElementById("discount").value || 0);
+            let paid = fee - dis;
+            if (paid < 0) paid = 0;
+            document.getElementById("paid").value = "₹ " + paid.toLocaleString();
+        }
+
+        function toggleReference() {
+            let paymentMethod = document.getElementById("payment_method").value;
+            let refField = document.getElementById("reference_field");
+            let refInput = document.getElementById("reference");
+
+            if (paymentMethod === "Cash") {
+                refField.style.opacity = "0.5";
+                refField.style.pointerEvents = "none";
+                refInput.removeAttribute("required");
+                refInput.value = "NA";
+            } else {
+                refField.style.opacity = "1";
+                refField.style.pointerEvents = "auto";
+                refInput.setAttribute("required", "required");
+                if (refInput.value === "NA") refInput.value = "";
+            }
+        }
+
+        window.onload = () => {
+            lucide.createIcons();
+            toggleReference();
+        };
+    </script>
+</head>
+
+<body>
+
+    <div class="main-container">
+
+        <div class="header-section">
+            <div class="header-logo">
+                <div class="logo-box">A</div>
+                <h1 class="header-title">ACADENO</h1>
+            </div>
+            <p class="header-subtitle">Premium Professional Receipt Management System</p>
+        </div>
+
+        <form action="/receipt" method="POST">
+            <div class="glass-card">
+
+                <!-- Billing Information -->
+                <div class="form-section-title">
+                    <i data-lucide="user"></i>
+                    Student Details
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <label class="form-label">Full Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i data-lucide="user-plus" size="18"></i></span>
+                            <input type="text" class="form-control" name="name" placeholder="Enter student full name"
+                                required>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-control" name="address" rows="2" placeholder="Street, City, ZIP Code"
+                            required></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i data-lucide="mail" size="18"></i></span>
+                            <input type="email" class="form-control" name="email" placeholder="example@email.com"
+                                required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Phone Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i data-lucide="phone" size="18"></i></span>
+                            <input type="tel" class="form-control" name="phone" placeholder="+91 00000 00000" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- Course & Fee Info -->
+                <div class="form-section-title">
+                    <i data-lucide="book-open"></i>
+                    Course & Enrollment
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Course Name</label>
+                        <input type="text" class="form-control" name="course" placeholder="e.g. Data Analytics"
+                            required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Duration</label>
+                        <input type="text" class="form-control" name="duration" placeholder="e.g. 3 Months" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Installment</label>
+                        <input type="number" class="form-control" name="installment" placeholder="1" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Total Fee</label>
+                        <div class="input-group">
+                            <span class="input-group-text">₹</span>
+                            <input type="number" id="fee" class="form-control" name="fee" placeholder="0.00"
+                                onkeyup="calculateBalance()" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Discount</label>
+                        <div class="input-group">
+                            <span class="input-group-text">₹</span>
+                            <input type="number" id="discount" class="form-control" name="discount" placeholder="0.00"
+                                onkeyup="calculateBalance()" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Payable Amount</label>
+                        <div class="input-group">
+                            <span class="input-group-text">₹</span>
+                            <input type="text" id="paid" class="form-control readonly-input" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- Invoice Details -->
+                <div class="form-section-title">
+                    <i data-lucide="file-text"></i>
+                    Invoice Context
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Payment Method</label>
+                        <select id="payment_method" class="form-select" name="payment_method"
+                            onchange="toggleReference()" required>
+                            <option value="Cash">Cash Payment</option>
+                            <option value="UPI">UPI (PhonePe, GPay)</option>
+                            <option value="Bank Transfer">Bank Transfer (NEFT/IMPS)</option>
+                            <option value="Card">Debit/Credit Card</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6" id="reference_field">
+                        <label class="form-label">Reference Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i data-lucide="hash" size="18"></i></span>
+                            <input type="text" id="reference" class="form-control" name="reference"
+                                placeholder="Transaction ID">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Invoice Date</label>
+                        <input type="date" class="form-control" name="invoice_date" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Joining Date</label>
+                        <input type="date" class="form-control" name="joining_date" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Validity Till</label>
+                        <input type="date" class="form-control" name="validity" required>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label">Approved Installments Text</label>
+                        <input type="text" class="form-control" name="approved"
+                            placeholder="e.g. 1 (One installment approved)" required>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <button type="submit" class="btn-generate">
+                        <i data-lucide="download-cloud"></i>
+                        Generate Premium Receipt
+                    </button>
+                    <p class="text-center mt-3 text-muted small">
+                        <i data-lucide="shield-check" size="14" style="vertical-align: middle;"></i>
+                        Encrypted & secure document generation
+                    </p>
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+
+</body>
+
+</html>

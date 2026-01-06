@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Receipt - {{ data.invoice }}</title>
+
+    <style>
+        @page {
+            size: A4;
+            margin: 10mm 15mm;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 11px;
+            color: #000;
+            line-height: 1.3;
+            background-color: #fff;
+        }
+
+        .receipt-container {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Header Section */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            /* Reduced from 25px */
+            margin-top: -5px;
+            /* Moved header slightly up */
+        }
+
+        .company-info {
+            flex: 2;
+        }
+
+        .company-name {
+            color: #00A6CE;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 1px;
+        }
+
+        .company-details {
+            font-size: 10px;
+            color: #333;
+        }
+
+        .receipt-title {
+            flex: 1;
+            text-align: center;
+        }
+
+        .receipt-title h1 {
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: underline;
+            margin-top: 5px;
+        }
+
+        .logo-section {
+            flex: 1.5;
+            text-align: right;
+            margin-top: -30px;
+            /* Moves logo upward */
+        }
+
+        .logo-section img {
+            max-height: 100px;
+            /* Increased logo size */
+        }
+
+        /* Info Section */
+        .info-grid {
+            margin-top: -30px;
+            margin-bottom: 5px;
+            /* Reduced from 15px */
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bill-to {
+            flex: 1.5;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .invoice-meta {
+            flex: 1;
+        }
+
+        .section-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .customer-name {
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 3px;
+            display: block;
+        }
+
+        .address-box {
+            white-space: pre-line;
+            /* Preserves line breaks for address */
+            line-height: 1.4;
+            margin-bottom: 3px;
+        }
+
+        .meta-row {
+            margin-bottom: 1px;
+            text-align: right;
+        }
+
+        .meta-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 140px;
+            text-align: left;
+        }
+
+        /* Table Style */
+        .table-container {
+            margin: 5px 0;
+            /* Reduced from 10px 0 */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #000;
+            table-layout: fixed;
+            /* Added to force narrow columns */
+        }
+
+        th {
+            background-color: #e8e8e8;
+            border: 1px solid #000;
+            padding: 5px 2px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        td {
+            border: 1px solid #000;
+            padding: 4px 2px;
+            /* Reduced horizontal padding */
+            word-wrap: break-word;
+            /* Ensures text doesn't force width */
+        }
+
+        .shaded {
+            background-color: #e8e8e8;
+        }
+
+        .amount-cell {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .currency-symbol {
+            margin-right: 2px;
+            /* Pulls symbol and number together */
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .font-bold {
+            font-weight: bold;
+        }
+
+        /* Notes Section */
+        .notes-section {
+            margin-top: 5px;
+            /* Reduced from 10px */
+        }
+
+        .notes-header {
+            font-weight: bold;
+            text-decoration: underline;
+            margin-bottom: 3px;
+        }
+
+        .notes-list {
+            list-style: none;
+        }
+
+        .notes-list li {
+            margin-bottom: 3px;
+        }
+
+        .validity-date {
+            text-decoration: underline;
+            font-weight: bold;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        /* Footer */
+        .footer-section {
+            margin-top: 5px;
+            /* Reduced from 20px */
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .signature-block {
+            line-height: 1.6;
+        }
+
+        .final-msg {
+            text-align: center;
+            margin-top: 5px;
+            /* Reduced from 20px */
+        }
+
+        .thank-you {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .computer-gen {
+            font-size: 10px;
+            color: #444;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="receipt-container">
+
+        <!-- Header -->
+        <div class="header">
+            <div class="company-info">
+                <div class="company-name">Acadeno Technologies Pvt Ltd</div>
+                <div class="company-details">
+                    First Floor, Arya Vaidya Sala Building, Kallai Road, Calicut-02<br>
+                    Phone: +91 4952 933 266 | Mob: +91 9447 933 266
+                </div>
+            </div>
+
+            <div class="receipt-title">
+                <h1>RECEIPT</h1>
+            </div>
+
+            <div class="logo-section">
+                <!-- Using absolute path for WeasyPrint -->
+                <img src="static/logo.png" alt="Acadeno Logo">
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="bill-to">
+                <span class="section-label">Bill To:</span>
+                <span class="customer-name">{{ data.name }}</span>
+                <div class="address-box">{{ data.address }}</div>
+                <div>e-mail: {{ data.email }}</div>
+                <div>Ph: {{ data.phone }}</div>
+            </div>
+
+            <div class="invoice-meta">
+                <table style="border: none; width: auto; margin-left: auto; border-collapse: collapse;">
+                    <tr style="border: none;">
+                        <td style="border: none; padding: 1px 5px; text-align: right; font-weight: bold;">Invoice No :
+                        </td>
+                        <td style="border: none; padding: 1px 0; text-align: left; min-width: 100px;">{{ data.invoice }}
+                        </td>
+                    </tr>
+                    <tr style="border: none;">
+                        <td style="border: none; padding: 1px 5px; text-align: right; font-weight: bold;">Invoice Date :
+                        </td>
+                        <td style="border: none; padding: 1px 0; text-align: left;">{{ data.invoice_date }}</td>
+                    </tr>
+                    <tr style="border: none;">
+                        <td style="border: none; padding: 1px 5px; text-align: right; font-weight: bold;">Joining Date :
+                        </td>
+                        <td style="border: none; padding: 1px 0; text-align: left;">{{ data.joining_date }}</td>
+                    </tr>
+                    <tr style="border: none;">
+                        <td style="border: none; padding: 1px 5px; text-align: right; font-weight: bold;">Payment Method
+                            :</td>
+                        <td style="border: none; padding: 1px 0; text-align: left;">{{ data.payment_method }}</td>
+                    </tr>
+                    <tr style="border: none;">
+                        <td style="border: none; padding: 1px 5px; text-align: right; font-weight: bold;">Reference # :
+                        </td>
+                        <td style="border: none; padding: 1px 0; text-align: left;">{{ data.reference or 'NA' }}</td>
+                    </tr>
+                    <tr style="border: none;">
+                        <td style="border: none; padding: 1px 5px; text-align: right; font-weight: bold;">Approved
+                            Installments :</td>
+                        <td style="border: none; padding: 1px 0; text-align: left;">{{ data.approved }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">Course Name</th>
+                        <th colspan="2" style="width: 3%;">Duration</th>
+                        <th style="width: 8%;">Installment</th>
+                        <th style="width: 5%;">Total Fee</th>
+                        <th style="width: 5%;">Discount</th>
+                        <th style="width: 12%;">Paid Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">{{ data.course }}</td>
+                        <td class="text-right" style="border-right: none; width: 4%;">
+                            {{ data.duration.split(' ')[0] }}
+                        </td>
+                        <td class="text-left" style="border-left: none; width: 6%;">Months</td>
+                        <td class="text-center">{{ data.installment }}</td>
+                        <td>
+                            <div class="amount-cell">
+                                <span class="currency-symbol">₹</span>{{ "{:,.2f}".format(data.fee) }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="amount-cell">
+                                <span class="currency-symbol">₹</span>{{ "{:,.2f}".format(data.discount) }}
+                            </div>
+                        </td>
+                        <td class="shaded">
+                            <div class="amount-cell font-bold">
+                                <span class="currency-symbol">₹</span>{{ "{:,.2f}".format(data.paid_amount) }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr style="background-color: #e8e8e8;">
+                        <td colspan="6" class="font-bold">
+                            <div style="display: flex; align-items: center; padding: 2px 0;">
+                                <span style="margin-left: 45px;">Total Amount in Words :-</span>
+                                <span style="flex-grow: 1; text-align: right; margin-right: 10px;">{{
+                                    data.amount_in_words }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="amount-cell font-bold">
+                                <span class="currency-symbol">₹</span>{{ "{:,.2f}".format(data.paid_amount) }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-right font-bold">Balance</td>
+                        <td>
+                            <div class="amount-cell">
+                                {% if data.balance > 0 %}
+                                <span class="currency-symbol">₹</span>{{ "{:,.2f}".format(data.balance) }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="notes-section">
+            <div class="notes-header">Important Notes:</div>
+            <ul class="notes-list">
+                <li>* This invoice is subject to mutually acceptable terms and conditions.</li>
+                <li>* The allocated time for your daily classes is set to 3 Hrs. a day / 18 Hrs. a week.</li>
+                <li>* The second and third installments are due every 25 days respectively from the date of joining. (If
+                    applicable)</li>
+                <li>* Your course validity / duration will be till <span class="validity-date">{{ data.validity
+                        }}</span></li>
+                <li>* If you have any questions concerning this invoice, please contact accounts@maitexa.in</li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <div class="signature-block">
+                <strong>Regards</strong><br><br><br>
+                <strong>Manager - Accounts</strong>
+            </div>
+        </div>
+
+        <div class="final-msg">
+            <div class="thank-you">Thank you for joining us!!! Start learning and get hired fast.</div>
+            <div class="computer-gen">This is computer generated invoice no signature required.</div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
