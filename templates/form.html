@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acadeno | Receipt Generator</title>
+    <link rel="icon" type="image/png" href="/static/acadeno_favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -204,14 +205,23 @@
             }
         }
     </style>
-
+    <script type="application/json" id="prefill-data">
+        {{ prefill | tojson | default('null') | safe }}
+    </script>
     <script>
         function calculateBalance() {
             let fee = parseInt(document.getElementById("fee").value || 0);
             let dis = parseInt(document.getElementById("discount").value || 0);
-            let paid = fee - dis;
-            if (paid < 0) paid = 0;
-            document.getElementById("paid").value = "₹ " + paid.toLocaleString();
+            let paid = parseInt(document.getElementById("paid_amount_input").value || 0);
+
+            let netPayable = fee - dis;
+            let balance = netPayable - paid;
+
+            if (netPayable < 0) netPayable = 0;
+            if (balance < 0) balance = 0;
+
+            document.getElementById("net_payable").value = "₹ " + netPayable.toLocaleString();
+            document.getElementById("balance_val").value = "₹ " + balance.toLocaleString();
         }
 
         function toggleReference() {
@@ -232,9 +242,59 @@
             }
         }
 
+        function calculateValidity() {
+            let joiningDateInput = document.getElementsByName('joining_date')[0];
+            let durationInput = document.getElementsByName('duration')[0];
+            let validityInput = document.getElementsByName('validity')[0];
+
+            if (joiningDateInput.value && durationInput.value) {
+                let joiningDate = new Date(joiningDateInput.value);
+                // Extract number from duration (e.g., "3 Months" -> 3)
+                let durationMatch = durationInput.value.match(/\d+/);
+                let durationMonths = durationMatch ? parseInt(durationMatch[0]) : 0;
+
+                if (!isNaN(joiningDate.getTime()) && durationMonths > 0) {
+                    let validityDate = new Date(joiningDate);
+                    // Add days (duration * 30 as requested)
+                    validityDate.setDate(validityDate.getDate() + (durationMonths * 30));
+
+                    let yyyy = validityDate.getFullYear();
+                    let mm = String(validityDate.getMonth() + 1).padStart(2, '0');
+                    let dd = String(validityDate.getDate()).padStart(2, '0');
+                    validityInput.value = `${yyyy}-${mm}-${dd}`;
+                }
+            }
+        }
+
         window.onload = () => {
             lucide.createIcons();
             toggleReference();
+
+            const joiningDateInput = document.getElementsByName('joining_date')[0];
+            const durationInput = document.getElementsByName('duration')[0];
+
+            joiningDateInput.addEventListener('change', calculateValidity);
+            durationInput.addEventListener('change', calculateValidity);
+
+            // Set default invoice date to today
+            const invoiceDateInput = document.getElementsByName('invoice_date')[0];
+            if (invoiceDateInput && !invoiceDateInput.value) {
+                invoiceDateInput.value = new Date().toISOString().split('T')[0];
+            }
+
+            const prefillDataElement = document.getElementById('prefill-data');
+            const prefillData = prefillDataElement ? JSON.parse(prefillDataElement.textContent) : null;
+
+            if (prefillData) {
+                const fields = ['name', 'address', 'email', 'phone', 'alt_phone', 'course', 'duration', 'joining_date'];
+                fields.forEach(field => {
+                    const el = document.getElementsByName(field)[0];
+                    if (el && prefillData[field]) {
+                        el.value = prefillData[field];
+                    }
+                });
+                calculateValidity();
+            }
         };
     </script>
 </head>
@@ -288,6 +348,13 @@
                             <input type="tel" class="form-control" name="phone" placeholder="+91 00000 00000" required>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Alternate Phone (Optional)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i data-lucide="phone-forwarded" size="18"></i></span>
+                            <input type="tel" class="form-control" name="alt_phone" placeholder="+91 00000 00000">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="section-divider"></div>
@@ -300,19 +367,33 @@
                 <div class="row g-4">
                     <div class="col-md-6">
                         <label class="form-label">Course Name</label>
-                        <input type="text" class="form-control" name="course" placeholder="e.g. Data Analytics"
-                            required>
+                        <select class="form-select" name="course" required>
+                            <option value="" disabled selected>Select Course</option>
+                            <option value="MERN Stack Development">MERN Stack Development</option>
+                            <option value="Python Django Development">Python Django Development</option>
+                            <option value="Data Analytics">Data Analytics</option>
+                            <option value="Digital Marketing">Digital Marketing</option>
+                            <option value="Flutter Development">Flutter Development</option>
+                            <option value="UI/UX Design">UI/UX Design</option>
+                        </select>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Duration</label>
-                        <input type="text" class="form-control" name="duration" placeholder="e.g. 3 Months" required>
+                        <select class="form-select" name="duration" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="3 Months">3 Months</option>
+                            <option value="4 Months">4 Months</option>
+                            <option value="6 Months">6 Months</option>
+                            <option value="8 Months">8 Months</option>
+                        </select>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Installment</label>
-                        <input type="number" class="form-control" name="installment" placeholder="1" required>
+                        <input type="number" class="form-control" name="installment" placeholder="1" min="1" max="3"
+                            required>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Total Fee</label>
                         <div class="input-group">
                             <span class="input-group-text">₹</span>
@@ -320,7 +401,7 @@
                                 onkeyup="calculateBalance()" required>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Discount</label>
                         <div class="input-group">
                             <span class="input-group-text">₹</span>
@@ -328,11 +409,26 @@
                                 onkeyup="calculateBalance()" required>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Payable Amount</label>
+                    <div class="col-md-3">
+                        <label class="form-label">Net Payable</label>
                         <div class="input-group">
                             <span class="input-group-text">₹</span>
-                            <input type="text" id="paid" class="form-control readonly-input" readonly>
+                            <input type="text" id="net_payable" class="form-control readonly-input" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Paid Amount</label>
+                        <div class="input-group">
+                            <span class="input-group-text">₹</span>
+                            <input type="number" id="paid_amount_input" class="form-control" name="paid_amount"
+                                placeholder="0.00" onkeyup="calculateBalance()" required>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <label class="form-label">Balance Amount</label>
+                        <div class="input-group">
+                            <span class="input-group-text">₹</span>
+                            <input type="text" id="balance_val" class="form-control readonly-input" readonly>
                         </div>
                     </div>
                 </div>
@@ -365,12 +461,12 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Invoice Date</label>
-                        <input type="date" class="form-control" name="invoice_date" required>
-                    </div>
-                    <div class="col-md-4">
                         <label class="form-label">Joining Date</label>
                         <input type="date" class="form-control" name="joining_date" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Invoice Date</label>
+                        <input type="date" class="form-control" name="invoice_date" required>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Validity Till</label>

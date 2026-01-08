@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acadeno | Student Registration</title>
+    <link rel="icon" type="image/png" href="/static/acadeno_favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --secondary: #7e22ce;
+            --accent: #f093fb;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-main: #2c3e50;
+            --text-muted: #5f6368;
+            --radius: 16px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-main);
+            padding: 40px 20px;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .logo-box {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 24px;
+        }
+
+        .header-title {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+            font-size: 32px;
+            margin: 0;
+        }
+
+        .header-subtitle {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .form-section-title {
+            font-weight: 700;
+            font-size: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 2px solid #eef0f2;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.1);
+        }
+
+        .input-group-text {
+            background: transparent;
+            border: 2px solid #eef0f2;
+            border-right: none;
+            border-radius: 12px 0 0 12px;
+            color: var(--text-muted);
+        }
+
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: #eef2f6;
+            margin: 40px 0;
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 16px 32px;
+            font-weight: 700;
+            font-size: 18px;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(26, 115, 232, 0.3);
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(26, 115, 232, 0.4);
+            color: white;
+            filter: brightness(1.1);
+        }
+
+        .btn-register:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .glass-card {
+                padding: 25px;
+            }
+
+            .header-title {
+                font-size: 26px;
+            }
+        }
+
+        .search-container {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(26, 115, 232, 0.05);
+            border-radius: 12px;
+            border: 1px dashed var(--primary);
+        }
+
+        .search-results-hint {
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .found-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            background: #e6f4ea;
+            color: #1e7e34;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: none;
+        }
+    </style>
+    <script>
+        async function searchStudent() {
+            const query = document.getElementById('searchQuery').value.trim();
+            if (!query) return;
+
+            const btn = document.getElementById('searchBtn');
+            const hint = document.getElementById('searchHint');
+            const badge = document.getElementById('foundBadge');
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+
+            try {
+                const response = await fetch(`/search_student?query=${encodeURIComponent(query)}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const data = result.data;
+                    // Pre-fill form
+                    document.getElementsByName('name')[0].value = data.name || '';
+                    document.getElementsByName('address')[0].value = data.address || '';
+                    document.getElementsByName('email')[0].value = data.email || '';
+                    document.getElementsByName('phone')[0].value = data.phone || '';
+                    document.getElementsByName('alt_phone')[0].value = data.alt_phone || '';
+                    document.getElementsByName('course')[0].value = data.course || '';
+                    document.getElementsByName('duration')[0].value = data.duration || '';
+                    document.getElementsByName('joining_date')[0].value = data.joining_date || '';
+
+                    badge.style.display = 'inline-flex';
+                    hint.style.display = 'none';
+
+                    // Auto-submit form to proceed to billing immediately
+                    setTimeout(() => {
+                        document.getElementById('regForm').submit();
+                    }, 800);
+
+                    lucide.createIcons();
+                } else {
+                    hint.innerText = "No student found with this Email/Phone. You can register them below.";
+                    hint.style.display = 'block';
+                    hint.style.color = '#dc3545';
+                    badge.style.display = 'none';
+                }
+            } catch (error) {
+                console.error("Search error:", error);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i data-lucide="search" size="18"></i> Search';
+                lucide.createIcons();
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('regForm').reset();
+            document.getElementById('foundBadge').style.display = 'none';
+            document.getElementById('searchHint').style.display = 'none';
+            document.getElementById('searchQuery').value = '';
+        }
+
+        window.onload = () => {
+            lucide.createIcons();
+
+            // Clear hint when typing new search
+            document.getElementById('searchQuery').addEventListener('input', () => {
+                document.getElementById('searchHint').style.display = 'none';
+                document.getElementById('foundBadge').style.display = 'none';
+            });
+        };
+    </script>
+</head>
+
+<body>
+
+    <div class="main-container">
+
+        <div class="header-section">
+            <div class="header-logo">
+                <div class="logo-box">A</div>
+                <h1 class="header-title">ACADENO</h1>
+            </div>
+            <p class="header-subtitle">New Student Registration</p>
+        </div>
+
+        <form action="/registration" method="POST" id="regForm">
+            <div class="glass-card">
+
+                <!-- Search for existing student -->
+                <div class="search-container">
+                    <label class="form-label">Search Existing Student (by Name, Email or Phone)</label>
+                    <div class="row g-2">
+                        <div class="col">
+                            <div class="input-group">
+                                <span class="input-group-text"><i data-lucide="search" size="18"></i></span>
+                                <input type="text" id="searchQuery" class="form-control"
+                                    placeholder="Enter name, email or phone">
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" id="searchBtn" class="btn btn-outline-primary"
+                                onclick="searchStudent()" style="border-radius: 12px; padding: 12px 20px;">
+                                <i data-lucide="search" size="18"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                    <div id="searchHint" class="search-results-hint"></div>
+                </div>
+
+                <div id="foundBadge" class="found-badge">
+                    <i data-lucide="check-circle" size="14"></i>
+                    Student Found & Data Pre-filled
+                </div>
+
+                <!-- Student Personal Details -->
+                <div class="form-section-title">
+                    <i data-lucide="user"></i>
+                    Student Details
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <label class="form-label">Full Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i data-lucide="user-plus" size="18"></i></span>
+                            <input type="text" class="form-control" name="name" placeholder="Enter student full name"
+                                required>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-control" name="address" rows="2" placeholder="Street, City, ZIP Code"
+                            required></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i data-lucide="mail" size="18"></i></span>
+                            <input type="email" class="form-control" name="email" placeholder="example@email.com"
+                                required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Phone Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i data-lucide="phone" size="18"></i></span>
+                            <input type="tel" class="form-control" name="phone" placeholder="+91 00000 00000" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Alternate Phone (Optional)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i data-lucide="phone-forwarded" size="18"></i></span>
+                            <input type="tel" class="form-control" name="alt_phone" placeholder="+91 00000 00000">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- Course Selection -->
+                <div class="form-section-title">
+                    <i data-lucide="book-open"></i>
+                    Course Information
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Course Name</label>
+                        <select class="form-select" name="course" required>
+                            <option value="" disabled selected>Select Course</option>
+                            <option value="MERN Stack Development">MERN Stack Development</option>
+                            <option value="Python Django Development">Python Django Development</option>
+                            <option value="Data Analytics">Data Analytics</option>
+                            <option value="Digital Marketing">Digital Marketing</option>
+                            <option value="Flutter Development">Flutter Development</option>
+                            <option value="Robotics">Robotics</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Expected Duration</label>
+                        <select class="form-select" name="duration" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="3 Months">3 Months</option>
+                            <option value="4 Months">4 Months</option>
+                            <option value="6 Months">6 Months</option>
+                            <option value="8 Months">8 Months</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Joining Date</label>
+                        <input type="date" class="form-control" name="joining_date" required>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn-register flex-grow-1">
+                            <i data-lucide="arrow-right-circle"></i>
+                            Register & Proceed to Billing
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="clearForm()"
+                            style="border-radius: 14px; padding: 16px 24px; font-weight: 600;">
+                            <i data-lucide="refresh-cw" size="18"></i> Clear
+                        </button>
+                    </div>
+                    <p class="text-center mt-3 text-muted small">
+                        step 1 of 2
+                    </p>
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+
+</body>
+
+</html>

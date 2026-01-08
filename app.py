@@ -24,9 +24,94 @@ def get_next_invoice_number():
     return formatted
 
 
+import json
+
+STUDENTS_FILE = "students.json"
+
+def load_students():
+    if not os.path.exists(STUDENTS_FILE):
+        return {}
+    try:
+        with open(STUDENTS_FILE, "r") as f:
+            return json.load(f)
+    except:
+        return {}
+
+def save_student(data):
+    students = load_students()
+    # Use email or phone as a unique key (email prioritized)
+    key = data.get("email") or data.get("phone")
+    if key:
+        students[key] = data
+        with open(STUDENTS_FILE, "w") as f:
+            json.dump(students, f, indent=4)
+
 @app.route('/')
 def home():
-    return render_template("form.html")
+    return render_template("registration.html")
+
+
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    if request.method == 'POST':
+        # Get data from registration form
+        data = {
+            "name": request.form.get("name"),
+            "address": request.form.get("address"),
+            "email": request.form.get("email"),
+            "phone": request.form.get("phone"),
+            "alt_phone": request.form.get("alt_phone"),
+            "course": request.form.get("course"),
+            "duration": request.form.get("duration"),
+            "joining_date": request.form.get("joining_date")
+        }
+        # Save student for future use
+        save_student(data)
+        return render_template("form.html", prefill=data)
+    return render_template("registration.html")
+
+@app.route('/search_student')
+def search_student():
+    query = request.args.get('query', '').strip().lower()
+    if not query:
+        return {"success": False, "message": "Query required"}, 400
+    
+    students = load_students()
+    
+    # Check for exact matches first (Email/Phone)
+    if query in students:
+        return {"success": True, "data": students[query]}
+    
+    # Partial match search (Name, Email, or Phone)
+    for key, s in students.items():
+        name = s.get('name', '').lower()
+        email = s.get('email', '').lower()
+        phone = s.get('phone', '').lower()
+        alt_phone = s.get('alt_phone', '').lower()
+        
+        if query in name or query in email or query in phone or query in alt_phone:
+            return {"success": True, "data": s}
+            
+    return {"success": False, "message": "Student not found"}, 404
+
+@app.route('/proceed_to_billing', methods=['POST'])
+def proceed_to_billing():
+    # This route takes JSON data of an existing student and renders the billing form
+    data = request.json
+    return render_template("form.html", prefill=data)
+
+
+@app.route('/clear_database', methods=['GET'])
+def clear_database():
+    # Clear Student Data
+    if os.path.exists(STUDENTS_FILE):
+        os.remove(STUDENTS_FILE)
+    
+    # Reset Invoice Number
+    with open("invoice.txt", "w") as f:
+        f.write("1")
+        
+    return "Database cleared successfully! Students removed and invoice number reset to 1."
 
 
 @app.route('/receipt', methods=["POST"])
@@ -37,11 +122,11 @@ def receipt():
     total_fee = int(request.form.get("fee", 0))
     discount = int(request.form.get("discount", 0))
 
-    # calculate paid amount
-    paid_amount = total_fee - discount
+    # get paid amount from form
+    paid_amount = int(request.form.get("paid_amount", 0))
     
     # calculate balance
-    balance = 0 # This could be calculated differently if needed
+    balance = (total_fee - discount) - paid_amount
     
     from num2words import num2words
     try:
@@ -73,6 +158,7 @@ def receipt():
         "address": request.form.get("address"),
         "email": request.form.get("email"),
         "phone": request.form.get("phone"),
+        "alt_phone": request.form.get("alt_phone"),
 
         "course": request.form.get("course"),
         "duration": request.form.get("duration"),
