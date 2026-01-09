@@ -212,15 +212,16 @@
         function calculateBalance() {
             let fee = parseInt(document.getElementById("fee").value || 0);
             let dis = parseInt(document.getElementById("discount").value || 0);
-            let paid = parseInt(document.getElementById("paid_amount_input").value || 0);
+            let prevPaid = parseInt(document.getElementById("already_paid").value || 0);
+            let paidNow = parseInt(document.getElementById("paid_amount_input").value || 0);
 
-            let netPayable = fee - dis;
-            let balance = netPayable - paid;
+            let netTotal = fee - dis;
+            let balance = netTotal - (prevPaid + paidNow);
 
-            if (netPayable < 0) netPayable = 0;
+            if (netTotal < 0) netTotal = 0;
             if (balance < 0) balance = 0;
 
-            document.getElementById("net_payable").value = "₹ " + netPayable.toLocaleString();
+            document.getElementById("net_payable").value = "₹ " + netTotal.toLocaleString();
             document.getElementById("balance_val").value = "₹ " + balance.toLocaleString();
         }
 
@@ -266,6 +267,7 @@
             }
         }
 
+
         window.onload = () => {
             lucide.createIcons();
             toggleReference();
@@ -293,7 +295,44 @@
                         el.value = prefillData[field];
                     }
                 });
+
+                // Installment context
+                if (prefillData.total_installments) {
+                    document.getElementsByName('installment')[0].value = prefillData.total_installments;
+                    // If returning student, make total installments readonly
+                    if (prefillData.previous_total_paid > 0) {
+                        document.getElementsByName('installment')[0].classList.add('readonly-input');
+                        document.getElementsByName('installment')[0].readOnly = true;
+                    }
+                }
+
+                if (prefillData.next_installment) {
+                    document.getElementsByName('approved')[0].value = prefillData.next_installment;
+                }
+
+                if (prefillData.previous_total_paid) {
+                    document.getElementById('already_paid').value = prefillData.previous_total_paid;
+                }
+
+                if (prefillData.fee_preset) {
+                    document.getElementById('fee').value = prefillData.fee_preset;
+                    // If returning student (already paid something), fix the fee
+                    if (prefillData.previous_total_paid > 0) {
+                        document.getElementById('fee').readOnly = true;
+                        document.getElementById('fee').classList.add('readonly-input');
+                    }
+                }
+                if (prefillData.discount_preset) {
+                    document.getElementById('discount').value = prefillData.discount_preset;
+                    // If returning student, fix the discount
+                    if (prefillData.previous_total_paid > 0) {
+                        document.getElementById('discount').readOnly = true;
+                        document.getElementById('discount').classList.add('readonly-input');
+                    }
+                }
+
                 calculateValidity();
+                calculateBalance();
             }
         };
     </script>
@@ -388,10 +427,15 @@
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label">Installment</label>
-                        <input type="number" class="form-control" name="installment" placeholder="1" min="1" max="3"
-                            required>
+                        <label class="form-label">Total Installment Plan</label>
+                        <select class="form-select" name="installment" required>
+                            <option value="1">1 Installment</option>
+                            <option value="2">2 Installments</option>
+                            <option value="3" selected>3 Installments</option>
+                        </select>
                     </div>
+
+
 
                     <div class="col-md-3">
                         <label class="form-label">Total Fee</label>
@@ -410,7 +454,15 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label">Net Payable</label>
+                        <label class="form-label">Already Paid</label>
+                        <div class="input-group">
+                            <span class="input-group-text">₹</span>
+                            <input type="number" id="already_paid" class="form-control readonly-input"
+                                name="already_paid" value="0" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Net Total</label>
                         <div class="input-group">
                             <span class="input-group-text">₹</span>
                             <input type="text" id="net_payable" class="form-control readonly-input" readonly>
@@ -474,7 +526,7 @@
                     </div>
 
                     <div class="col-md-12">
-                        <label class="form-label">Approved Installments Text</label>
+                        <label class="form-label">Current Installment No</label>
                         <input type="text" class="form-control" name="approved"
                             placeholder="e.g. 1 (One installment approved)" required>
                     </div>
@@ -496,6 +548,23 @@
 
     </div>
 
+    <script>
+        // Clear form after submission with a small delay
+        document.querySelector('form').onsubmit = function () {
+            const form = this;
+            setTimeout(() => {
+                form.reset();
+                // Reset custom readonly fields and internal values
+                document.getElementById('already_paid').value = 0;
+                document.getElementById('net_payable').value = "";
+                document.getElementById('balance_val').value = "";
+                // Force recalculation of icons or other visual states if needed
+                lucide.createIcons();
+                // Optionally redirect back to registration if you want a full fresh start
+                // window.location.href = '/'; 
+            }, 1000);
+        };
+    </script>
 </body>
 
 </html>

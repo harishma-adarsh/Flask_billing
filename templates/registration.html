@@ -245,6 +245,12 @@
                     document.getElementsByName('duration')[0].value = data.duration || '';
                     document.getElementsByName('joining_date')[0].value = data.joining_date || '';
 
+                    // Track financial history for installments
+                    document.getElementsByName('previous_total_paid')[0].value = data.previous_total_paid || 0;
+                    document.getElementsByName('next_installment')[0].value = data.next_installment || 1;
+                    document.getElementsByName('fee_preset')[0].value = data.fee_preset || 0;
+                    document.getElementsByName('discount_preset')[0].value = data.discount_preset || 0;
+
                     badge.style.display = 'inline-flex';
                     hint.style.display = 'none';
 
@@ -301,6 +307,11 @@
         </div>
 
         <form action="/registration" method="POST" id="regForm">
+            <!-- Hidden fields for returning students -->
+            <input type="hidden" name="previous_total_paid" value="0">
+            <input type="hidden" name="next_installment" value="1">
+            <input type="hidden" name="fee_preset" value="0">
+            <input type="hidden" name="discount_preset" value="0">
             <div class="glass-card">
 
                 <!-- Search for existing student -->
@@ -406,26 +417,42 @@
                         <label class="form-label">Joining Date</label>
                         <input type="date" class="form-control" name="joining_date" required>
                     </div>
+
                 </div>
 
-                <div class="mt-5">
-                    <div class="d-flex gap-3">
-                        <button type="submit" class="btn-register flex-grow-1">
-                            <i data-lucide="arrow-right-circle"></i>
-                            Register & Proceed to Billing
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="clearForm()"
-                            style="border-radius: 14px; padding: 16px 24px; font-weight: 600;">
-                            <i data-lucide="refresh-cw" size="18"></i> Clear
-                        </button>
-                    </div>
-                    <p class="text-center mt-3 text-muted small">
-                        step 1 of 2
-                    </p>
+                <div class="d-flex gap-3">
+                    <button type="submit" class="btn-register flex-grow-1">
+                        <i data-lucide="arrow-right-circle"></i>
+                        Register & Proceed to Billing
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="clearForm()"
+                        style="border-radius: 14px; padding: 16px 24px; font-weight: 600;">
+                        <i data-lucide="refresh-cw" size="18"></i> Clear Form
+                    </button>
                 </div>
 
+                <div class="mt-4 pt-4 border-top">
+                    <button type="button" class="btn btn-outline-danger w-100" onclick="confirmReset()"
+                        style="border-radius: 12px; padding: 10px; font-size: 14px; font-weight: 500; border-style: dashed;">
+                        <i data-lucide="trash-2" size="16"></i> Reset Database (Clear All Records)
+                    </button>
+                </div>
+
+                <p class="text-center mt-3 text-muted small">
+                    step 1 of 2
+                </p>
             </div>
-        </form>
+
+            <script>
+                function confirmReset() {
+                    if (confirm("Are you sure you want to clear the entire database? This will delete ALL students, ALL payment records, and reset the invoice number. This action cannot be undone.")) {
+                        window.location.href = "/clear_database";
+                    }
+                }
+            </script>
+
+    </div>
+    </form>
 
     </div>
 
