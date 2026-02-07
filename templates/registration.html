@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acadeno | Student Registration</title>
-    <link rel="icon" type="image/png" href="/static/acadeno_favicon.png">
+    <link rel="icon" type="image/png" href="/static/acadeno_logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -17,32 +17,99 @@
             --primary-dark: #1557b0;
             --secondary: #7e22ce;
             --accent: #f093fb;
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --text-main: #2c3e50;
-            --text-muted: #5f6368;
-            --radius: 16px;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --bg-dark: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --radius: 24px;
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
         }
 
         body {
             font-family: 'Outfit', sans-serif;
-            background: var(--bg-gradient);
+            background: #f8fafc;
             min-height: 100vh;
             color: var(--text-main);
-            padding: 40px 20px;
+            margin: 0;
+            padding: 20px 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .aurora-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: #f8fafc;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(26, 115, 232, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(126, 34, 206, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(240, 147, 251, 0.12) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(79, 172, 254, 0.1) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(255, 255, 255, 0.5) 0px, transparent 50%);
+            background-attachment: fixed;
         }
 
         .main-container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            animation: fadeIn 0.8s ease-out;
+            position: relative;
+            z-index: 1;
         }
 
-        @keyframes fadeIn {
+        .card-header-flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            margin: -35px -35px 30px -35px;
+            padding: 30px 35px;
+            background: rgba(248, 250, 252, 0.5);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+
+        .logo-img {
+            max-width: 500px;
+            max-height: 180px;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.05));
+        }
+
+        .header-brand-text {
+            font-weight: 800;
+            font-size: 22px;
+            color: #1e293b;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 2px solid #e2e8f0;
+            padding-left: 25px;
+            line-height: 1;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: var(--radius);
+            padding: 35px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(40px);
             }
 
             to {
@@ -51,132 +118,142 @@
             }
         }
 
-        .header-section {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .header-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 10px;
-        }
-
-        .logo-box {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+        .form-section-title {
             font-weight: 800;
             font-size: 24px;
-        }
-
-        .header-title {
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            color: var(--text-main);
-            font-size: 32px;
-            margin: 0;
-        }
-
-        .header-subtitle {
-            color: var(--text-muted);
-            font-size: 16px;
-        }
-
-        .glass-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: var(--radius);
-            padding: 40px;
-            box-shadow: var(--shadow);
             margin-bottom: 30px;
-        }
-
-        .form-section-title {
-            font-weight: 700;
-            font-size: 20px;
-            margin-bottom: 25px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: var(--primary);
+            gap: 12px;
+            color: var(--text-main);
+            position: relative;
+        }
+
+        .form-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
         }
 
         .form-label {
             font-weight: 600;
             font-size: 14px;
             color: var(--text-main);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            opacity: 0.8;
         }
 
         .form-control,
         .form-select {
-            border-radius: 12px;
-            padding: 12px 16px;
-            border: 2px solid #eef0f2;
-            transition: all 0.3s ease;
+            border-radius: 16px;
+            padding: 14px 18px;
+            border: 2px solid rgba(26, 115, 232, 0.1);
+            background: #f0f7ff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 15px;
+            color: var(--text-main);
         }
 
-        .form-control:focus,
-        .form-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.1);
+        .error-message {
+            color: #dc2626;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .is-invalid {
+            border-color: #dc2626 !important;
+            background-color: #fef2f2 !important;
         }
 
         .input-group-text {
-            background: transparent;
-            border: 2px solid #eef0f2;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(0, 0, 0, 0.05);
             border-right: none;
-            border-radius: 12px 0 0 12px;
-            color: var(--text-muted);
+            border-radius: 16px 0 0 16px;
+            color: var(--primary);
+            padding-left: 18px;
         }
 
         .input-group .form-control {
             border-left: none;
-            border-radius: 0 12px 12px 0;
+            border-radius: 0 16px 16px 0;
         }
 
         .section-divider {
             height: 1px;
-            background: #eef2f6;
-            margin: 40px 0;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
+            margin: 45px 0;
         }
 
         .btn-register {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            border-radius: 14px;
-            padding: 16px 32px;
+            border-radius: 18px;
+            padding: 18px 36px;
             font-weight: 700;
             font-size: 18px;
             width: 100%;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            box-shadow: 0 4px 15px rgba(26, 115, 232, 0.3);
+            gap: 12px;
+            box-shadow: 0 15px 35px rgba(26, 115, 232, 0.25);
+            cursor: pointer;
         }
 
         .btn-register:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(26, 115, 232, 0.4);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 45px rgba(26, 115, 232, 0.35);
             color: white;
             filter: brightness(1.1);
         }
 
-        .btn-register:active {
-            transform: translateY(0);
+        .search-container {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            border: 2px dashed rgba(26, 115, 232, 0.3);
+        }
+
+        .search-results-hint {
+            font-size: 14px;
+            margin-top: 10px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .found-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #dcfce7;
+            color: #166534;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .btn-clear {
+            border-radius: 18px;
+            padding: 16px 28px;
+            font-weight: 600;
+            border: 2px solid #e2e8f0;
+            color: #64748b;
+            background: white;
+            cursor: pointer;
         }
 
         @media (max-width: 768px) {
@@ -184,39 +261,173 @@
                 padding: 25px;
             }
 
-            .header-title {
-                font-size: 26px;
+            .logo-img {
+                max-width: 200px;
+            }
+
+            body {
+                padding: 20px 15px;
             }
         }
-
-        .search-container {
-            margin-bottom: 25px;
-            padding: 20px;
-            background: rgba(26, 115, 232, 0.05);
-            border-radius: 12px;
-            border: 1px dashed var(--primary);
-        }
-
-        .search-results-hint {
-            font-size: 13px;
-            margin-top: 8px;
-            display: none;
-        }
-
-        .found-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 4px 10px;
-            background: #e6f4ea;
-            color: #1e7e34;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: none;
-        }
     </style>
+</head>
+
+<body>
+    <div class="aurora-bg"></div>
+
+    <div class="main-container">
+
+        <form action="/registration" method="POST" id="regForm">
+            <input type="hidden" name="previous_total_paid" value="0">
+            <input type="hidden" name="next_installment" value="1">
+            <input type="hidden" name="fee_preset" value="0">
+            <input type="hidden" name="discount_preset" value="0">
+            <input type="hidden" name="total_installments" value="3">
+
+            <div class="glass-card">
+                <div class="card-header-flex">
+                    <img src="/static/Acadeno_Logo_Final.png" alt="Acadeno Logo" class="logo-img">
+                    <div class="header-brand-text">
+                        Student Enrollment portal
+                    </div>
+                </div>
+
+                <div class="search-container">
+                    <label class="form-label">Lookup Existing Student</label>
+                    <div class="row g-2">
+                        <div class="col">
+                            <div class="input-group">
+                                <span class="input-group-text"><i data-lucide="search" size="18"></i></span>
+                                <input type="text" id="searchQuery" class="form-control"
+                                    placeholder="Enter Student Name / Email / Phone Number">
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" id="searchBtn" class="btn btn-primary" onclick="searchStudent()"
+                                style="border-radius: 16px; padding: 14px 25px; background: var(--primary); border:none; font-weight:700;">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                    <div id="searchHint" class="search-results-hint"></div>
+                </div>
+
+                <div id="foundBadge" class="found-badge">
+                </div>
+
+                <div class="form-section-title">
+                    <i data-lucide="user-check" style="color: var(--primary);"></i>
+                    Student Information
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-2">
+                        <label class="form-label">Title</label>
+                        <select class="form-select" name="salutation">
+                            <option value="Mr.">Mr.</option>
+                            <option value="Ms.">Ms.</option>
+                            <option value="Mrs.">Mrs.</option>
+                        </select>
+                    </div>
+                    <div class="col-md-10">
+                        <label class="form-label">Complete Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i data-lucide="user" size="18"></i></span>
+                            <input type="text" class="form-control" name="name" placeholder="Enter full name">
+                        </div>
+                        <div class="error-message" id="error-name">Please enter the student's full name.</div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Permanent Address</label>
+                        <textarea class="form-control" name="address" rows="3"
+                            placeholder="Enter complete permanent address"></textarea>
+                        <div class="error-message" id="error-address">A complete permanent address is required.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Official Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i data-lucide="mail" size="18"></i></span>
+                            <input type="email" class="form-control" name="email" placeholder="example@gmail.com">
+                        </div>
+                        <div class="error-message" id="error-email">A valid email address is required.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Primary Mobile Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i data-lucide="smartphone" size="18"></i></span>
+                            <input type="tel" class="form-control" name="phone"
+                                placeholder="Enter 10-digit mobile number">
+                        </div>
+                        <div class="error-message" id="error-phone">A valid 10-digit mobile number is required.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Alternate Mobile Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i data-lucide="phone-forwarded" size="18"></i></span>
+                            <input type="tel" class="form-control" name="alt_phone"
+                                placeholder="Enter alternate mobile number (Optional)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="form-section-title">
+                    <i data-lucide="graduation-cap" style="color: var(--secondary);"></i>
+                    Academic Program
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-8">
+                        <label class="form-label">Specialization Course</label>
+                        <select class="form-select" name="course">
+                            <option value="" disabled selected>Select Program</option>
+                            <option value="MERN Stack Development">MERN Stack Development</option>
+                            <option value="Python Django Development">Python Django Development</option>
+                            <option value="Data Analytics">Data Analytics</option>
+                            <option value="Digital Marketing">Digital Marketing</option>
+                            <option value="Flutter Development">Flutter Development</option>
+                            <option value="Robotics">Robotics</option>
+                        </select>
+                        <div class="error-message" id="error-course">Please select a course program.</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Program Duration</label>
+                        <select class="form-select" name="duration">
+                            <option value="" disabled selected>Duration</option>
+                            <option value="3 Months">3 Months</option>
+                            <option value="4 Months">4 Months</option>
+                            <option value="6 Months">6 Months</option>
+                        </select>
+                        <div class="error-message" id="error-duration">Please specify the program duration.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Session Start Date</label>
+                        <input type="date" class="form-control" name="joining_date">
+                        <div class="error-message" id="error-joining_date">Please select a session start date.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Course Validity Till</label>
+                        <input type="date" class="form-control" name="validity" readonly
+                            style="background: #eef2ff; font-weight: 600; color: var(--primary);">
+                    </div>
+                </div>
+
+                <div class="mt-5 d-flex flex-column flex-md-row gap-3">
+                    <button type="submit" class="btn-register">
+                        <span>Register & Generate Billing</span>
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+                    <button type="button" class="btn-clear" onclick="clearForm()">
+                        <i data-lucide="refresh-cw" size="18"></i>
+                    </button>
+                </div>
+
+                <p class="text-center mt-4 text-muted small" style="font-weight: 500;">
+                    Phase 01: Core Registration
+                </p>
+            </div>
+        </form>
+    </div>
+
     <script>
         async function searchStudent() {
             const query = document.getElementById('searchQuery').value.trim();
@@ -235,7 +446,6 @@
 
                 if (result.success) {
                     const data = result.data;
-                    // Pre-fill form
                     document.getElementsByName('name')[0].value = data.name || '';
                     document.getElementsByName('address')[0].value = data.address || '';
                     document.getElementsByName('email')[0].value = data.email || '';
@@ -245,34 +455,84 @@
                     document.getElementsByName('duration')[0].value = data.duration || '';
                     document.getElementsByName('joining_date')[0].value = data.joining_date || '';
 
-                    // Track financial history for installments
                     document.getElementsByName('previous_total_paid')[0].value = data.previous_total_paid || 0;
                     document.getElementsByName('next_installment')[0].value = data.next_installment || 1;
                     document.getElementsByName('fee_preset')[0].value = data.fee_preset || 0;
                     document.getElementsByName('discount_preset')[0].value = data.discount_preset || 0;
+                    document.getElementsByName('total_installments')[0].value = data.total_installments || 3;
 
+                    badge.innerHTML = '<i data-lucide="check-circle" size="18"></i> Student Profile Identified! Initializing secure auto-fill...';
                     badge.style.display = 'inline-flex';
                     hint.style.display = 'none';
 
-                    // Auto-submit form to proceed to billing immediately
                     setTimeout(() => {
                         document.getElementById('regForm').submit();
-                    }, 800);
-
-                    lucide.createIcons();
+                    }, 1200);
                 } else {
-                    hint.innerText = "No student found with this Email/Phone. You can register them below.";
+                    hint.innerText = "Verification failed: Student record not found. Please confirm details for a new registration.";
                     hint.style.display = 'block';
-                    hint.style.color = '#dc3545';
+                    hint.style.color = '#dc2626';
                     badge.style.display = 'none';
                 }
             } catch (error) {
                 console.error("Search error:", error);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<i data-lucide="search" size="18"></i> Search';
+                btn.innerHTML = 'Search';
                 lucide.createIcons();
             }
+        }
+
+        function validateForm(event) {
+            const requiredFields = ['name', 'address', 'email', 'phone', 'course', 'duration', 'joining_date'];
+            let isValid = true;
+
+            requiredFields.forEach(fieldName => {
+                const field = document.getElementsByName(fieldName)[0];
+                const errorDiv = document.getElementById(`error-${fieldName}`);
+
+                field.classList.remove('is-invalid');
+                if (errorDiv) errorDiv.style.display = 'none';
+
+                if (!field.value || field.value.trim() === "") {
+                    isValid = false;
+                    field.classList.add('is-invalid');
+                    if (errorDiv) errorDiv.style.display = 'block';
+                }
+
+                if (fieldName === 'email' && field.value) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(field.value)) {
+                        isValid = false;
+                        field.classList.add('is-invalid');
+                        if (errorDiv) {
+                            errorDiv.innerText = "Please enter a valid email address.";
+                            errorDiv.style.display = 'block';
+                        }
+                    }
+                }
+
+                if (fieldName === 'phone' && field.value) {
+                    if (field.value.length !== 10 || isNaN(field.value)) {
+                        isValid = false;
+                        field.classList.add('is-invalid');
+                        if (errorDiv) {
+                            errorDiv.innerText = "Mobile number must be 10 digits.";
+                            errorDiv.style.display = 'block';
+                        }
+                    }
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault();
+                const firstError = document.querySelector('.is-invalid');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstError.focus();
+                }
+            }
+            return isValid;
         }
 
         function clearForm() {
@@ -280,182 +540,72 @@
             document.getElementById('foundBadge').style.display = 'none';
             document.getElementById('searchHint').style.display = 'none';
             document.getElementById('searchQuery').value = '';
+            document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            lucide.createIcons();
         }
+
+        function calculateValidity() {
+            const joiningDateInput = document.getElementsByName('joining_date')[0];
+            const durationInput = document.getElementsByName('duration')[0];
+            const validityInput = document.getElementsByName('validity')[0];
+
+            if (joiningDateInput.value && durationInput.value) {
+                const joiningDate = new Date(joiningDateInput.value);
+                const durationMatch = durationInput.value.match(/\d+/);
+                const durationMonths = durationMatch ? parseInt(durationMatch[0]) : 0;
+
+                if (!isNaN(joiningDate.getTime()) && durationMonths > 0) {
+                    const validityDate = new Date(joiningDate);
+                    validityDate.setMonth(validityDate.getMonth() + durationMonths);
+
+                    const yyyy = validityDate.getFullYear();
+                    const mm = String(validityDate.getMonth() + 1).padStart(2, '0');
+                    const dd = String(validityDate.getDate()).padStart(2, '0');
+                    validityInput.value = `${yyyy}-${mm}-${dd}`;
+                }
+            }
+        }
+
+        const courseDurations = {
+            "MERN Stack Development": "6 Months",
+            "Python Django Development": "6 Months",
+            "Data Analytics": "4 Months",
+            "Digital Marketing": "3 Months",
+            "Flutter Development": "4 Months",
+            "Robotics": "3 Months"
+        };
 
         window.onload = () => {
             lucide.createIcons();
 
-            // Clear hint when typing new search
-            document.getElementById('searchQuery').addEventListener('input', () => {
+            const regForm = document.getElementById('regForm');
+            const courseSelect = document.getElementsByName('course')[0];
+            const durationSelect = document.getElementsByName('duration')[0];
+            const joiningDateInput = document.getElementsByName('joining_date')[0];
+            const searchQuery = document.getElementById('searchQuery');
+
+            regForm.addEventListener('submit', validateForm);
+
+            searchQuery.addEventListener('input', () => {
                 document.getElementById('searchHint').style.display = 'none';
                 document.getElementById('foundBadge').style.display = 'none';
             });
+
+            // Auto-calculate validity on changes
+            durationSelect.addEventListener('change', calculateValidity);
+            joiningDateInput.addEventListener('change', calculateValidity);
+
+            // Auto-select duration on course change
+            courseSelect.addEventListener('change', () => {
+                const selectedCourse = courseSelect.value;
+                if (courseDurations[selectedCourse]) {
+                    durationSelect.value = courseDurations[selectedCourse];
+                    calculateValidity();
+                }
+            });
         };
     </script>
-</head>
-
-<body>
-
-    <div class="main-container">
-
-        <div class="header-section">
-            <div class="header-logo">
-                <div class="logo-box">A</div>
-                <h1 class="header-title">ACADENO</h1>
-            </div>
-            <p class="header-subtitle">New Student Registration</p>
-        </div>
-
-        <form action="/registration" method="POST" id="regForm">
-            <!-- Hidden fields for returning students -->
-            <input type="hidden" name="previous_total_paid" value="0">
-            <input type="hidden" name="next_installment" value="1">
-            <input type="hidden" name="fee_preset" value="0">
-            <input type="hidden" name="discount_preset" value="0">
-            <div class="glass-card">
-
-                <!-- Search for existing student -->
-                <div class="search-container">
-                    <label class="form-label">Search Existing Student (by Name, Email or Phone)</label>
-                    <div class="row g-2">
-                        <div class="col">
-                            <div class="input-group">
-                                <span class="input-group-text"><i data-lucide="search" size="18"></i></span>
-                                <input type="text" id="searchQuery" class="form-control"
-                                    placeholder="Enter name, email or phone">
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <button type="button" id="searchBtn" class="btn btn-outline-primary"
-                                onclick="searchStudent()" style="border-radius: 12px; padding: 12px 20px;">
-                                <i data-lucide="search" size="18"></i> Search
-                            </button>
-                        </div>
-                    </div>
-                    <div id="searchHint" class="search-results-hint"></div>
-                </div>
-
-                <div id="foundBadge" class="found-badge">
-                    <i data-lucide="check-circle" size="14"></i>
-                    Student Found & Data Pre-filled
-                </div>
-
-                <!-- Student Personal Details -->
-                <div class="form-section-title">
-                    <i data-lucide="user"></i>
-                    Student Details
-                </div>
-                <div class="row g-4">
-                    <div class="col-md-12">
-                        <label class="form-label">Full Name</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i data-lucide="user-plus" size="18"></i></span>
-                            <input type="text" class="form-control" name="name" placeholder="Enter student full name"
-                                required>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <label class="form-label">Address</label>
-                        <textarea class="form-control" name="address" rows="2" placeholder="Street, City, ZIP Code"
-                            required></textarea>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Email Address</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i data-lucide="mail" size="18"></i></span>
-                            <input type="email" class="form-control" name="email" placeholder="example@email.com"
-                                required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Phone Number</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i data-lucide="phone" size="18"></i></span>
-                            <input type="tel" class="form-control" name="phone" placeholder="+91 00000 00000" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Alternate Phone (Optional)</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i data-lucide="phone-forwarded" size="18"></i></span>
-                            <input type="tel" class="form-control" name="alt_phone" placeholder="+91 00000 00000">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="section-divider"></div>
-
-                <!-- Course Selection -->
-                <div class="form-section-title">
-                    <i data-lucide="book-open"></i>
-                    Course Information
-                </div>
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <label class="form-label">Course Name</label>
-                        <select class="form-select" name="course" required>
-                            <option value="" disabled selected>Select Course</option>
-                            <option value="MERN Stack Development">MERN Stack Development</option>
-                            <option value="Python Django Development">Python Django Development</option>
-                            <option value="Data Analytics">Data Analytics</option>
-                            <option value="Digital Marketing">Digital Marketing</option>
-                            <option value="Flutter Development">Flutter Development</option>
-                            <option value="Robotics">Robotics</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Expected Duration</label>
-                        <select class="form-select" name="duration" required>
-                            <option value="" disabled selected>Select</option>
-                            <option value="3 Months">3 Months</option>
-                            <option value="4 Months">4 Months</option>
-                            <option value="6 Months">6 Months</option>
-                            <option value="8 Months">8 Months</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Joining Date</label>
-                        <input type="date" class="form-control" name="joining_date" required>
-                    </div>
-
-                </div>
-
-                <div class="d-flex gap-3">
-                    <button type="submit" class="btn-register flex-grow-1">
-                        <i data-lucide="arrow-right-circle"></i>
-                        Register & Proceed to Billing
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary" onclick="clearForm()"
-                        style="border-radius: 14px; padding: 16px 24px; font-weight: 600;">
-                        <i data-lucide="refresh-cw" size="18"></i> Clear Form
-                    </button>
-                </div>
-
-                <div class="mt-4 pt-4 border-top">
-                    <button type="button" class="btn btn-outline-danger w-100" onclick="confirmReset()"
-                        style="border-radius: 12px; padding: 10px; font-size: 14px; font-weight: 500; border-style: dashed;">
-                        <i data-lucide="trash-2" size="16"></i> Reset Database (Clear All Records)
-                    </button>
-                </div>
-
-                <p class="text-center mt-3 text-muted small">
-                    step 1 of 2
-                </p>
-            </div>
-
-            <script>
-                function confirmReset() {
-                    if (confirm("Are you sure you want to clear the entire database? This will delete ALL students, ALL payment records, and reset the invoice number. This action cannot be undone.")) {
-                        window.location.href = "/clear_database";
-                    }
-                }
-            </script>
-
-    </div>
-    </form>
-
-    </div>
-
 </body>
 
 </html>

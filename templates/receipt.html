@@ -8,7 +8,7 @@
     <style>
         @page {
             size: A4;
-            margin: 10mm 15mm;
+            margin: 5mm 15mm;
         }
 
         * {
@@ -32,60 +32,66 @@
 
         /* Header Section */
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            /* Reduced from 25px */
-            margin-top: -5px;
-            /* Moved header slightly up */
+            display: table;
+            width: 100%;
+            margin-top: -40px;
+        }
+
+        .company-info,
+        .receipt-title,
+        .logo-section {
+            display: table-cell;
+            vertical-align: middle;
         }
 
         .company-info {
-            flex: 2;
+            width: 30%;
+            text-align: left;
         }
 
         .company-name {
-            color: #00A6CE;
+            color: #0170B8;
             font-size: 20px;
             font-weight: bold;
-            margin-bottom: 1px;
+            margin-bottom: 2px;
+            white-space: nowrap;
         }
 
         .company-details {
             font-size: 10px;
             color: #333;
+            line-height: 1.4;
         }
 
         .receipt-title {
-            flex: 1;
+            width: 20%;
             text-align: center;
         }
 
         .receipt-title h1 {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
             text-decoration: underline;
-            margin-top: 5px;
+            margin-left: 50px;
+            display: inline-block;
         }
 
         .logo-section {
-            flex: 1.5;
-            text-align: right;
-            margin-top: -30px;
-            /* Moves logo upward */
+            width: 50%;
+            text-align: center;
+            margin-left: -40px;
         }
 
         .logo-section img {
-            max-height: 100px;
-            /* Increased logo size */
+            width: 300px;
+            max-width: 100%;
+            object-fit: contain;
         }
 
         /* Info Section */
         .info-grid {
-            margin-top: 0px;
+            margin-top: -50px;
             margin-bottom: 5px;
-            /* Reduced from 15px */
             display: flex;
             justify-content: space-between;
         }
@@ -94,10 +100,6 @@
             flex: 1.5;
             font-weight: bold;
             text-align: left;
-        }
-
-        .invoice-meta {
-            flex: 1;
         }
 
         .section-label {
@@ -115,51 +117,41 @@
 
         .address-box {
             white-space: pre-line;
-            /* Preserves line breaks for address */
             line-height: 1.4;
             margin-bottom: 3px;
+            font-weight: normal;
         }
 
-        .meta-row {
-            margin-bottom: 1px;
-            text-align: right;
-        }
-
-        .meta-label {
-            font-weight: bold;
-            display: inline-block;
-            width: 140px;
-            text-align: left;
+        .invoice-meta {
+            flex: 1.5;
         }
 
         /* Table Style */
         .table-container {
             margin: 5px 0;
-            /* Reduced from 10px 0 */
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            border: 1px solid #000;
+            border: 1.5px solid #000;
             table-layout: fixed;
-            /* Added to force narrow columns */
         }
 
         th {
             background-color: #e8e8e8;
-            border: 1px solid #000;
+            border: 1.5px solid #000;
             padding: 5px 2px;
             font-weight: bold;
             text-align: center;
+            font-size: 10px;
         }
 
         td {
             border: 1px solid #000;
             padding: 4px 2px;
-            /* Reduced horizontal padding */
+            font-size: 11px;
             word-wrap: break-word;
-            /* Ensures text doesn't force width */
         }
 
         .shaded {
@@ -172,8 +164,7 @@
         }
 
         .currency-symbol {
-            margin-right: 2px;
-            /* Pulls symbol and number together */
+            margin-right: 5px;
         }
 
         .text-center {
@@ -195,7 +186,6 @@
         /* Notes Section */
         .notes-section {
             margin-top: 5px;
-            /* Reduced from 10px */
         }
 
         .notes-header {
@@ -206,10 +196,12 @@
 
         .notes-list {
             list-style: none;
+            padding-left: 0;
         }
 
         .notes-list li {
             margin-bottom: 3px;
+            font-size: 10.5px;
         }
 
         .validity-date {
@@ -222,26 +214,38 @@
         /* Footer */
         .footer-section {
             margin-top: 5px;
-            /* Reduced from 20px */
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
+            align-items: center;
+            position: relative;
         }
 
         .signature-block {
-            line-height: 1.6;
+            line-height: 2.5;
+            font-weight: bold;
+        }
+
+        .stamp-container {
+            position: absolute;
+            left: 200px;
+            top: -20px;
+        }
+
+        .stamp-img {
+            max-height: 100px;
+            opacity: 0.8;
         }
 
         .final-msg {
             text-align: center;
             margin-top: 5px;
-            /* Reduced from 20px */
         }
 
         .thank-you {
             font-weight: bold;
             margin-bottom: 3px;
-            color: #1a73e8;
+            color: #0170B8;
+            font-size: 12px;
         }
 
         .computer-gen {
@@ -270,18 +274,17 @@
             </div>
 
             <div class="logo-section">
-                <!-- Using absolute path for WeasyPrint -->
-                <img src="static/logo.png" alt="Acadeno Logo">
+                <img src="static/Acadeno_Logo_New.png" alt="Acadeno Logo">
             </div>
         </div>
 
         <div class="info-grid">
             <div class="bill-to">
                 <span class="section-label">Bill To:</span>
-                <span class="customer-name">{{ data.name }}</span>
-                <div class="address-box">{{ data.address }}</div>
+                <span class="customer-name">{{ data.salutation }} {{ data.name }}</span>
+                <div class="address-box"><strong>{{ data.address }}</strong></div>
                 <div>e-mail: {{ data.email }}</div>
-                <div>Ph: {{ data.phone }}</div>
+                <div>Ph: {{ data.phone }}{% if data.alt_phone %}, {{ data.alt_phone }}{% endif %}</div>
             </div>
 
             <div class="invoice-meta">
@@ -289,33 +292,40 @@
                     <tr style="border: none;">
                         <td style="border: none; padding: 1px 5px; text-align: right; font-weight: bold;">Invoice No :
                         </td>
-                        <td style="border: none; padding: 1px 0; text-align: left; min-width: 100px;">{{ data.invoice }}
-                        </td>
+                        <td
+                            style="border: none; padding: 1px 0; text-align: left; min-width: 120px; padding-left: 10px;">
+                            {{ data.invoice }}</td>
                     </tr>
                     <tr style="border: none;">
                         <td style="border: none; padding: 1px 5px; text-align: right; font-weight: bold;">Invoice Date :
                         </td>
-                        <td style="border: none; padding: 1px 0; text-align: left;">{{ data.invoice_date }}</td>
+                        <td style="border: none; padding: 1px 0; text-align: left; padding-left: 10px;">{{
+                            data.invoice_date }}</td>
                     </tr>
                     <tr style="border: none;">
                         <td style="border: none; padding: 1px 5px; text-align: right; font-weight: bold;">Joining Date :
                         </td>
-                        <td style="border: none; padding: 1px 0; text-align: left;">{{ data.joining_date }}</td>
+                        <td style="border: none; padding: 1px 0; text-align: left; padding-left: 10px;">{{
+                            data.joining_date }}</td>
                     </tr>
                     <tr style="border: none;">
                         <td style="border: none; padding: 1px 5px; text-align: right; font-weight: bold;">Payment Method
                             :</td>
-                        <td style="border: none; padding: 1px 0; text-align: left;">{{ data.payment_method }}</td>
+                        <td style="border: none; padding: 1px 0; text-align: left; padding-left: 10px;">{{
+                            data.payment_method }}</td>
                     </tr>
                     <tr style="border: none;">
                         <td style="border: none; padding: 1px 5px; text-align: right; font-weight: bold;">Reference # :
                         </td>
-                        <td style="border: none; padding: 1px 0; text-align: left;">{{ data.reference or 'NA' }}</td>
+                        <td style="border: none; padding: 1px 0; text-align: left; padding-left: 10px;">{{
+                            data.reference or 'NA' }}</td>
                     </tr>
                     <tr style="border: none;">
                         <td style="border: none; padding: 1px 5px; text-align: right; font-weight: bold;">Approved
                             Installments :</td>
-                        <td style="border: none; padding: 1px 0; text-align: left;">{{ data.approved }}</td>
+                        <td style="border: none; padding: 1px 0; text-align: left; padding-left: 10px;">{{
+                            data.installment
+                            }}</td>
                     </tr>
                 </table>
             </div>
@@ -325,62 +335,44 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 30%;">Course Name</th>
-                        <th colspan="2" style="width: 3%;">Duration</th>
-                        <th style="width: 8%;">Installment</th>
-                        <th style="width: 5%;">Total Fee</th>
-                        <th style="width: 5%;">Discount</th>
+                        <th style="width: 38%;">Course Name</th>
+                        <th colspan="2" style="width: 14%;">Duration</th>
+                        <th style="width: 12%;">Installment</th>
+                        <th style="width: 12%;">Total Fee</th>
+                        <th style="width: 12%;">Discount</th>
                         <th style="width: 12%;">Paid Amount</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-center">{{ data.course }}</td>
-                        <td class="text-right" style="border-right: none; width: 4%;">
-                            {{ data.duration.split(' ')[0] }}
+                        <td class="text-center font-bold">{{ data.course }}</td>
+                        <td class="text-right" style="border-right: none; width: 6%;">{{ data.duration.split(' ')[0] }}
                         </td>
-                        <td class="text-left" style="border-left: none; width: 6%;">Months</td>
-                        <td class="text-center">{{ data.installment }}</td>
-                        <td>
-                            <div class="amount-cell">
-                                <span class="currency-symbol">₹</span>{{ "{:,.2f}".format(data.fee) }}
-                            </div>
+                        <td class="text-left" style="border-left: none; width: 8%;">Months</td>
+                        <td class="text-center">{{ data.approved }}</td>
+                        <td class="amount-cell"><span class="currency-symbol">₹</span>{{ "{:,.2f}".format(data.fee) }}
                         </td>
-                        <td>
-                            <div class="amount-cell">
-                                <span class="currency-symbol">₹</span>{{ "{:,.2f}".format(data.discount) }}
-                            </div>
-                        </td>
-                        <td class="shaded">
-                            <div class="amount-cell font-bold">
-                                <span class="currency-symbol">₹</span>{{ "{:,.2f}".format(data.paid_amount) }}
-                            </div>
-                        </td>
+                        <td class="amount-cell"><span class="currency-symbol">₹</span>{{ "{:,.2f}".format(data.discount)
+                            }}</td>
+                        <td class="amount-cell shaded font-bold"><span class="currency-symbol">₹</span>{{
+                            "{:,.2f}".format(data.paid_amount) }}</td>
                     </tr>
-                    <tr style="background-color: #e8e8e8;">
+                    <tr class="shaded">
                         <td colspan="6" class="font-bold">
-                            <div style="display: flex; align-items: center; padding: 2px 0;">
-                                <span style="margin-left: 45px;">Total Amount in Words :-</span>
-                                <span style="flex-grow: 1; text-align: right; margin-right: 10px;">{{
-                                    data.amount_in_words }}</span>
+                            <div style="display: flex; justify-content: space-between; padding: 2px 10px;">
+                                <span>Total Amount in Words :-</span>
+                                <span>{{ data.amount_in_words }}</span>
                             </div>
                         </td>
-                        <td>
-                            <div class="amount-cell font-bold">
-                                <span class="currency-symbol">₹</span>{{ "{:,.2f}".format(data.paid_amount) }}
-                            </div>
+                        <td class="amount-cell font-bold">
+                            <span class="currency-symbol">₹</span>{{ "{:,.2f}".format(data.paid_amount) }}
                         </td>
                     </tr>
                     <tr>
                         <td colspan="6" class="text-right font-bold">Balance</td>
-                        <td>
-                            <div class="amount-cell">
-                                {% if data.balance > 0 %}
-                                <span class="currency-symbol">₹</span>{{ "{:,.2f}".format(data.balance) }}
-                                {% else %}
-                                -
-                                {% endif %}
-                            </div>
+                        <td class="amount-cell font-bold">
+                            <span class="currency-symbol">₹</span>{% if data.balance > 0 %}{{
+                            "{:,.2f}".format(data.balance) }}{% else %}-{% endif %}
                         </td>
                     </tr>
                 </tbody>
@@ -402,8 +394,8 @@
 
         <div class="footer-section">
             <div class="signature-block">
-                <strong>Regards</strong><br><br><br>
-                <strong>Manager - Accounts</strong>
+                Regards<br><br><br>
+                Manager - Accounts
             </div>
         </div>
 
@@ -411,8 +403,6 @@
             <div class="thank-you">Thank you for joining us!!! Start learning and get hired fast.</div>
             <div class="computer-gen">This is computer generated invoice no signature required.</div>
         </div>
-
-    </div>
 
 </body>
 
